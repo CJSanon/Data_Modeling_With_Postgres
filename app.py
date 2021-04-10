@@ -34,11 +34,11 @@ fig = px.scatter_geo(df, lat="artist_latitude",
                      hover_name="artist_name",  # column added to hover information
                      projection="natural earth")
 
-fig.update_layout(
-    plot_bgcolor=colors['background'],
-    paper_bgcolor=colors['background'],
-    font_color=colors['text']
-)
+# fig.update_layout(
+#     plot_bgcolor=colors['background'],
+#     paper_bgcolor=colors['background'],
+#     font_color=colors['text']
+# )
 
 fig.show()
 
