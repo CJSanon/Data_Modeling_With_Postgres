@@ -10,18 +10,24 @@ import psycopg2
 
 from sql_queries import *
 
+# Create connection to sparkify database
 conn = psycopg2.connect(database='sparkifydb', user='student', password='student', host='127.0.0.1', port='5432')
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+# Connects external_stylesheets to the styling of our Dash app
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+# The colors we'll use for the layout of the page
 colors = {
     'background': '#111111',
     'text': '#7FDBFF'
 }
 
+# Read in data from a select query of the sparkify database into a pandas dataframe
 df = pd.read_sql_query(artist_location_select, con=conn)
+
+# Loads the dataframe into a geo scatter plot
 fig = px.scatter_geo(df, lat="artist_latitude",
                      lon="artist_longitude",
                      color="artist_location",  # which column to use to set the color of markers
@@ -36,7 +42,7 @@ fig.update_layout(
 
 fig.show()
 
-
+# Creates the layout for our data visualization using Dash html components
 app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
     html.H1(
         children='Sparkify Song Play Analysis',
