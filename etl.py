@@ -6,6 +6,18 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
+    This function reads the file in the filepath (data/song_data), gets the song and artist info,
+    then inserts it into the songs and artists dimension tables.
+
+    Parameters:
+        cur: the cursor object that allows Python to execute PostgreSQL queries.
+        filepath: location of song data.
+
+    Returns:
+        None
+    """
+
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -20,6 +32,17 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """
+     This function reads the file in the filepath (data/log_data), gets the time and user data and inserts them into
+     the time and users dimension table.
+
+     Parameters:
+         cur: the cursor object that allows Python to execute PostgreSQL queries.
+         filepath: location of log data.
+
+     Returns:
+         None
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -62,6 +85,19 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    This function loads in JSON logs in the specified filepath and processes each of them one by one
+    with the function passed as an argument.
+
+    Parameter:
+        cur: the cursor object.
+        conn: handles the connection to the database.
+        filepath: location of data files to be processed.
+        func: passes in a function to transform the data.
+
+    Return:
+        None
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -81,6 +117,11 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    Creates connection to sparkify database and gets the cursor to it.
+    Loads log data and processes it.
+    Closes the connection to the database.
+    """
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 

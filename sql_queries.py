@@ -10,19 +10,19 @@ time_table_drop = "DROP TABLE IF EXISTS time;"
 
 # Fact table for our star schema
 songplay_table_create = "CREATE TABLE IF NOT EXISTS songplays (songplay_id SERIAL PRIMARY KEY, start_time TIMESTAMPTZ NOT NULL, \
-                        user_id INT, level VARCHAR, song_id VARCHAR, artist_id VARCHAR, session_id INT, location VARCHAR, user_agent VARCHAR);"
+                        user_id INT NOT NULL, level VARCHAR NOT NULL, song_id VARCHAR, artist_id VARCHAR, session_id INT NOT NULL, location VARCHAR NOT NULL, user_agent VARCHAR NOT NULL);"
 
 # User dimension table which will store user data from the JSON log: log_data
-user_table_create = "CREATE TABLE IF NOT EXISTS users (id INT, first_name VARCHAR, last_name VARCHAR, gender CHAR, level VARCHAR);"
+user_table_create = "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY, first_name VARCHAR NOT NULL, last_name VARCHAR NOT NULL, gender CHAR NOT NULL, level VARCHAR NOT NULL);"
 
 # Song dimension table which will store song information from JSON log: song_data
-song_table_create = "CREATE TABLE IF NOT EXISTS songs (id VARCHAR, title VARCHAR, artist_id VARCHAR, year INT, duration NUMERIC);"
+song_table_create = "CREATE TABLE IF NOT EXISTS songs (id VARCHAR PRIMARY KEY, title VARCHAR NOT NULL, artist_id VARCHAR NOT NULL, year INT NOT NULL, duration NUMERIC NOT NULL);"
 
 # Artist dimension table which will store artist information from JSON log: song_data
-artist_table_create = "CREATE TABLE IF NOT EXISTS artists (id VARCHAR, artist_name VARCHAR, artist_location text, artist_latitude NUMERIC, artist_longitude NUMERIC);"
+artist_table_create = "CREATE TABLE IF NOT EXISTS artists (id VARCHAR PRIMARY KEY, artist_name VARCHAR NOT NULL, artist_location text NOT NULL, artist_latitude NUMERIC, artist_longitude NUMERIC);"
 
 # Timestamp dimension table which will store timestamps from JSON log: log_data
-time_table_create = "CREATE TABLE IF NOT EXISTS time (start_time TIMESTAMPTZ NOT NULL, year INT, month INT, week INT, day INT, hour INT, weekday INT);"
+time_table_create = "CREATE TABLE IF NOT EXISTS time (start_time TIMESTAMPTZ PRIMARY KEY, year INT NOT NULL, month INT NOT NULL, week INT NOT NULL, day INT NOT NULL, hour INT NOT NULL, weekday INT NOT NULL);"
 
 # INSERT RECORDS
 
@@ -32,19 +32,27 @@ songplay_table_insert = "INSERT INTO songplays (start_time, user_id, level, song
 
 # Inserts data from log_data log into the "users" dimension table
 user_table_insert = "INSERT INTO users (id, first_name, last_name, gender, level) " \
-                    "VALUES (%s, %s, %s, %s, %s)"
+                    "VALUES (%s, %s, %s, %s, %s) " \
+                    "ON CONFLICT (id) " \
+                    "DO UPDATE SET level=EXCLUDED.level"
 
 # Inserts data from song_data log into the "songs" dimension table
 song_table_insert = "INSERT INTO songs (id, title, artist_id, year, duration) " \
-                    "VALUES (%s, %s, %s, %s, %s)"
+                    "VALUES (%s, %s, %s, %s, %s) " \
+                    "ON CONFLICT (id)" \
+                    "DO NOTHING" \
 
 # Inserts data from song_data log into the "artists" dimension table
 artist_table_insert = "INSERT INTO artists (id, artist_name, artist_location, artist_latitude, artist_longitude) " \
-                      "VALUES (%s, %s, %s, %s, %s)"
+                      "VALUES (%s, %s, %s, %s, %s) " \
+                      "ON CONFLICT (id) " \
+                      "DO NOTHING"
 
 # Inserts data from log_data log into the "time" dimension table
 time_table_insert = "INSERT INTO time (start_time, year, month, week, day, hour, weekday) " \
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s) " \
+                    "ON CONFLICT (start_time) " \
+                    "DO NOTHING"
 
 # FIND SONGS
 

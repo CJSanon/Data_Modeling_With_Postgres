@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\etl.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\sql_queries.py">
           <value>
             <Attribute>
