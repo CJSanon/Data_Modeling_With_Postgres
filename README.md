@@ -1,7 +1,7 @@
 # Data Modeling With Postgres
 
 ## Project
-This project is meant to provide a data pipeline that allows for the Sparkify analytics team to query JSON logs in order to analyze user activity on their music streaming app.
+This project is meant to provide a data pipeline that allows for the (fictitious) Sparkify analytics team to query JSON logs in order to analyze user activity on their music streaming app.
 
 
 ![](app_interaction.gif)
